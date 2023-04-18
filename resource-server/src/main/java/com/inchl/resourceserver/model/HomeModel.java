@@ -11,10 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 public class HomeModel {
 
-    int totalBugs;
     int totalApps;
     int totalDevelopers;
     int totalTesters;
+
+    int totalBugs;
     int openBugs;
     int closedBugs;
     int criticalBugs;

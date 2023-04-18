@@ -1,5 +1,6 @@
 package com.inchl.resourceserver.model;
 
+import com.inchl.resourceserver.entity.BugModelEntity;
 import com.inchl.resourceserver.entity.UserModelEntity;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,22 @@ public class BugModel {
     String appVersion;
     String screenshot;
     Long dateCreated;
+
+    public BugModelEntity toEntity(){
+        return new BugModelEntity(
+                id,
+                title,
+                description,
+                logcat,
+                bugStatus,
+                bugFlag,
+                reporter.mapModelToEntity(),
+                assignedTo.mapModelToEntity(),
+                appVersion,
+                screenshot,
+                dateCreated
+        );
+    }
+
 
 }

@@ -1,5 +1,8 @@
 package com.inchl.resourceserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.inchl.resourceserver.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,18 +39,30 @@ public class UserModelEntity {
     Long dateCreated;
     Boolean enabled = true;
 
-    //MappedBy: It is used for @oneToMany only, that determines foreign key for child table
-    //i.e "reporter" is used as a field name for the Bug Table
-    @OneToMany(mappedBy = "reporter")
+    /**
+     * MappedBy: It is used for @oneToMany only, that determines foreign key for child table
+     * i.e "reporter" is used as a foreignKey field name for the Bug Table
+     */
+
+    /**
+     * In parent entity / Where mappedBy is done There we put @JsonManagedReference
+     * What is does is that, it tells the JPA to retrieve nested data for this entity for the use as a foreignKey
+     * Forward Reference, that includes during the serialization (means this list with be serialized and retrieved without infinite loop)
+     */
+    @OneToMany(mappedBy = "reporter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value="reporterRef")
     List<BugModelEntity> bugsReported;
 
-    @OneToMany(mappedBy = "assignedTo")
+    @OneToMany(mappedBy = "assignedTo",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "assignedToRef")
     List<BugModelEntity> bugsAssigned;
 
-    @OneToMany(mappedBy = "user")
-    List<ActivityModelEntity> activitiesCreated;
+    @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "user_ref")
+    List<ActivityModelEntity> activities;
 
-    public UserModelEntity(Long id, String fullName, String userName, String password, String email, String role, String image, String userType, Long dateCreated, Boolean enabled, List<BugModelEntity> bugsReported, List<BugModelEntity> bugsAssigned, List<ActivityModelEntity> activitiesCreated) {
+
+    public UserModelEntity(Long id, String fullName, String userName, String password, String email, String role, String image, String userType, Long dateCreated, Boolean enabled, List<BugModelEntity> bugsReported, List<BugModelEntity> bugsAssigned, List<ActivityModelEntity> activities) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
@@ -60,7 +75,22 @@ public class UserModelEntity {
         this.enabled = enabled;
         this.bugsReported = bugsReported;
         this.bugsAssigned = bugsAssigned;
-        this.activitiesCreated = activitiesCreated;
+        this.activities = activities;
+    }
+
+    public UserModelEntity(Long id, String fullName, String userName, String password, String email, String role, String image, String userType, Long dateCreated, Boolean enabled, List<BugModelEntity> bugsReported, List<BugModelEntity> bugsAssigned) {
+        this.id = id;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.image = image;
+        this.userType = userType;
+        this.dateCreated = dateCreated;
+        this.enabled = enabled;
+        this.bugsReported = bugsReported;
+        this.bugsAssigned = bugsAssigned;
     }
 
     public UserModelEntity(Long id, String fullName, String userName, String password, String email, String role, String image, String userType, Long dateCreated, Boolean enabled) {
@@ -74,5 +104,37 @@ public class UserModelEntity {
         this.userType = userType;
         this.dateCreated = dateCreated;
         this.enabled = enabled;
+    }
+
+    public UserModel toUserModelWithAllData() {
+        return new UserModel(
+                id,
+                fullName,
+                userName,
+                password,
+                email,
+                role,
+                image,
+                userType,
+                dateCreated,
+                enabled,
+                bugsReported,
+                bugsAssigned
+        );
+    }
+
+    public UserModel toUserModelWithoutAllData() {
+        return new UserModel(
+                id,
+                fullName,
+                userName,
+                password,
+                email,
+                role,
+                image,
+                userType,
+                dateCreated,
+                enabled
+        );
     }
 }

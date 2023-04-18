@@ -49,9 +49,14 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectModel updateProject(Long id, ProjectModel projectModel) {
         ProjectModelEntity updatedProjectEntity = projectRepository.findById(id).map(project->{
             try{
+                if(projectModel.getName() != null)
                 project.setName(projectModel.getName());
-                project.setDescription(projectModel.getDescription());
-                project.setImage(projectModel.getImage());
+
+                if(projectModel.getDescription() != null)
+                    project.setDescription(projectModel.getDescription());
+
+                if(projectModel.getImage() != null)
+                    project.setImage(projectModel.getImage());
             }catch (Exception e){
                 throw new BadRequestException(e.getMessage());
             }

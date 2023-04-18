@@ -10,15 +10,6 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/inchl</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="client/Hibernate" uuid="ce200c9d-a92c-407b-8418-e0ce0ee10e6a">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>Hibernate</remarks>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://127.0.0.1:5432/inchl</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="resource-server/Hibernate" uuid="4d3d691d-8c48-4184-b435-c8b7b85120a8">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
