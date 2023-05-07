@@ -1,6 +1,6 @@
 package com.inchl.resourceserver.model;
 
-import com.inchl.resourceserver.entity.ActivityModelEntity;
+import com.inchl.resourceserver.entity.BugModelEntity;
 import com.inchl.resourceserver.entity.ProjectModelEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,15 +10,34 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProjectModel {
     Long id;
     String name;
     String description;
     String image;
     Long dateCreated;
+    List<BugModel> bugList;
+    List<ActivityModel> activityList;
 
-    public ProjectModelEntity toEntity() {
+    public ProjectModel(Long id, String name, String description, String image, Long dateCreated, List<BugModel> bugList, List<ActivityModel> activityList) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.dateCreated = dateCreated;
+        this.bugList = bugList;
+        this.activityList = activityList;
+    }
+
+    public ProjectModel(Long id, String name, String description, String image, Long dateCreated) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.dateCreated = dateCreated;
+    }
+
+    public ProjectModelEntity toEntityWithoutAllFields() {
         return new ProjectModelEntity(
           id,
           name,
@@ -27,4 +46,14 @@ public class ProjectModel {
           dateCreated
         );
     }
+
+//    public ProjectModel toModelFromEntity() {
+//        return new ProjectModel(
+//                id,
+//                name,
+//                description,
+//                image,
+//                dateCreated
+//        );
+//    }
 }

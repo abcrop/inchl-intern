@@ -49,15 +49,15 @@ public class UserModelEntity {
      * What is does is that, it tells the JPA to retrieve nested data for this entity for the use as a foreignKey
      * Forward Reference, that includes during the serialization (means this list with be serialized and retrieved without infinite loop)
      */
-    @OneToMany(mappedBy = "reporter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reporter", fetch = FetchType.LAZY)
     @JsonManagedReference(value="reporterRef")
     List<BugModelEntity> bugsReported;
 
-    @OneToMany(mappedBy = "assignedTo",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignedTo",  fetch = FetchType.LAZY)
     @JsonManagedReference(value = "assignedToRef")
     List<BugModelEntity> bugsAssigned;
 
-    @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY)
     @JsonManagedReference(value = "user_ref")
     List<ActivityModelEntity> activities;
 

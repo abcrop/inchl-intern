@@ -1,4 +1,4 @@
-package com.inchl.authorizationserver.config;
+package com.inchl.resourceserver.config;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.stereotype.Component;
@@ -14,8 +14,8 @@ public class CorsCustomizer {
             CorsConfigurationSource source = s -> {
                 CorsConfiguration cc = new CorsConfiguration();
                 cc.setAllowCredentials(true);
-//                cc.setAllowedOrigins(List.of("http://127.0.0.1:3000"));
-                cc.setAllowedOrigins(List.of("*"));
+                cc.setAllowedOrigins(List.of("http://127.0.0.1:9000"));
+                cc.setExposedHeaders(List.of("haha,haha"));
                 cc.setAllowedHeaders(List.of("*"));
                 cc.setAllowedMethods(List.of("*"));
                 return cc;

@@ -25,12 +25,12 @@ public class SignupController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/createUser")
-    public String createUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
         LoggerFactory.getLogger(SignupController.class).error("Get password "+user.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         LoggerFactory.getLogger(SignupController.class).error("seted password "+user.getPassword());
-        userRepository.save(user);
+        var newUser = userRepository.save(user);
 
-        return "Success";
+        return newUser ;
     }
 }

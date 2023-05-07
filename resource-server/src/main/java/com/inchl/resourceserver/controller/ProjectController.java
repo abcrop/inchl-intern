@@ -1,6 +1,7 @@
 package com.inchl.resourceserver.controller;
 
 import com.inchl.resourceserver.model.ProjectModel;
+import com.inchl.resourceserver.model.ProjectResponseModel;
 import com.inchl.resourceserver.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,11 @@ public class ProjectController {
     @GetMapping("/getProject/{id}")
     public ProjectModel getProject(@PathVariable Long id) {
         return projectService.getProject(id);
+    }
+
+    @GetMapping("/getAllProjectDataResponse")
+    public List<ProjectResponseModel> getProjectResponseModel() {
+        return projectService.getAllProjectDataResponse();
     }
 
     @DeleteMapping("/deleteProject/{id}")

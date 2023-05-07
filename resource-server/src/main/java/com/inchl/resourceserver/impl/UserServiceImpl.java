@@ -9,6 +9,9 @@ import com.inchl.resourceserver.util.Constants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +26,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserModel createUser(UserModel user) {
-        userRepository.save(user.mapModelToEntity());
-        return user;
+        UserModelEntity entity = userRepository.save(user.mapModelToEntity());
+        return entity.toUserModelWithoutAllData();
     }
 
     @Override
@@ -34,7 +40,11 @@ public class UserServiceImpl implements UserService {
         UserModelEntity updatedUser =  userRepository.findById(id).map(user-> {
             if(newUser.getFullName() != null) user.setFullName(newUser.getFullName());
             if(newUser.getEmail() != null) user.setEmail(newUser.getEmail());
+            if(newUser.getUserName() != null) user.setUserName(newUser.getUserName());
+            if(newUser.getRole() != null) user.setRole(newUser.getRole());
+            if(newUser.getImage() != null) user.setImage(newUser.getImage());
             if(newUser.getUserType() != null) user.setUserType(newUser.getUserType());
+            if(newUser.getPassword() != null) user.setPassword(passwordEncoder.encode(newUser.getPassword()));
             return userRepository.save(user);
         }).orElseThrow(()->
                   new UserNotFoundException(id)
@@ -67,7 +77,5 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(
                 UserModelEntity::toUserModelWithAllData).collect(Collectors.toList());
     }
-
-
 
 }

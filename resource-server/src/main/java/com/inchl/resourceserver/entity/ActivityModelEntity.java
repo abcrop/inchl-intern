@@ -3,7 +3,6 @@ package com.inchl.resourceserver.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.inchl.resourceserver.model.ActivityModel;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -52,7 +51,7 @@ public class ActivityModelEntity {
         return new ActivityModel(
                 id,
                 user.toUserModelWithoutAllData(),
-                project.toProjectModelResponse(),
+                project.toProjectModelWithoutAllFields(),
                 bug.toBugModelWithAllData(),
                 activityType,
                 dateCreated

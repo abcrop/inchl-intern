@@ -33,7 +33,7 @@ public class BugModelEntity {
 
     /**
      * Without add JsonBackReference, When fetching Users, it has to fetch AllBugs Reported by that user,
-     * While retrieving reported bugs, it will again fetch for 'reporter' field and vice-versa...it goes on infinitely.
+     * While retrieving reporter, it will again fetch for 'bug' field and then 'reporter'...it goes on infinitely.
      * Backward Reference, this force to omit the serialization (thus reporter, assignedTo won't be seen in the List<Bug> in the UserEntity)</Bug>
      */
     @ManyToOne()
@@ -44,7 +44,12 @@ public class BugModelEntity {
     @JsonBackReference(value = "assignedToRef")
     UserModelEntity assignedTo;
 
-    @OneToMany(mappedBy = "bug",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne()
+    @JsonBackReference(value = "pBugRef")
+    ProjectModelEntity project;
+
+//    @OneToMany(mappedBy = "bug",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bug",  fetch = FetchType.LAZY)
     @JsonManagedReference(value = "bug_ref")
     List<ActivityModelEntity> activities;
 
@@ -53,11 +58,12 @@ public class BugModelEntity {
 
     Long dateCreated;
 
-    public BugModelEntity(Long id, String title, String description, String logcat, String bugStatus, String bugFlag, UserModelEntity reporter, UserModelEntity assignedTo, List<ActivityModelEntity> activities, String appVersion, String screenshot, Long dateCreated) {
+    public BugModelEntity(Long id, String title, String description, String logcat, String bugStatus, String bugFlag, ProjectModelEntity project, UserModelEntity reporter, UserModelEntity assignedTo, List<ActivityModelEntity> activities, String appVersion, String screenshot, Long dateCreated) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.logcat = logcat;
+        this.project = project;
         this.bugStatus = bugStatus;
         this.bugFlag = bugFlag;
         this.reporter = reporter;
@@ -68,11 +74,12 @@ public class BugModelEntity {
         this.dateCreated = dateCreated;
     }
 
-    public BugModelEntity(Long id, String title, String description, String logcat, String bugStatus, String bugFlag, UserModelEntity reporter, UserModelEntity assignedTo, String appVersion, String screenshot, Long dateCreated) {
+    public BugModelEntity(Long id, String title, String description, String logcat,  ProjectModelEntity project, String bugStatus, String bugFlag, UserModelEntity reporter, UserModelEntity assignedTo, String appVersion, String screenshot, Long dateCreated) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.logcat = logcat;
+        this.project = project;
         this.bugStatus = bugStatus;
         this.bugFlag = bugFlag;
         this.reporter = reporter;
@@ -91,6 +98,7 @@ public class BugModelEntity {
                 logcat,
                 bugStatus,
                 bugFlag,
+                project.toProjectModelWithoutAllFields(),
                 reporter.toUserModelWithoutAllData(),
                 assignedTo.toUserModelWithoutAllData(),
                 appVersion,

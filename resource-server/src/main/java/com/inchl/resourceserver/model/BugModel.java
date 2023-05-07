@@ -18,6 +18,7 @@ public class BugModel {
     String logcat;
     String bugStatus;
     String bugFlag;
+    ProjectModel project;
     UserModel reporter;
     UserModel assignedTo;
     String appVersion;
@@ -30,6 +31,7 @@ public class BugModel {
                 title,
                 description,
                 logcat,
+                project.toEntityWithoutAllFields(),
                 bugStatus,
                 bugFlag,
                 reporter.mapModelToEntity(),

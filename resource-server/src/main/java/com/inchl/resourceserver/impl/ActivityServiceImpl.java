@@ -1,11 +1,9 @@
 package com.inchl.resourceserver.impl;
 
 import com.inchl.resourceserver.entity.ActivityModelEntity;
-import com.inchl.resourceserver.entity.BugModelEntity;
 import com.inchl.resourceserver.exception.BadRequestException;
 import com.inchl.resourceserver.exception.NotFoundExceptions;
 import com.inchl.resourceserver.model.ActivityModel;
-import com.inchl.resourceserver.model.BugModel;
 import com.inchl.resourceserver.repository.ActivityRepository;
 import com.inchl.resourceserver.service.ActivityService;
 import jakarta.transaction.Transactional;
@@ -25,8 +23,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public ActivityModel createActivity(ActivityModel activityModel) {
-        activityRepository.save(activityModel.toEntity());
-        return activityModel;
+        ActivityModelEntity activityModelEntity = activityRepository.save(activityModel.toEntity());
+        return activityModelEntity.toActivityModelWithAllData();
     }
 
     @Override
@@ -37,7 +35,7 @@ public class ActivityServiceImpl implements ActivityService {
                     activityEntity.setUser(activityModel.getUser().mapModelToEntity());
 
                 if(activityModel.getProject() != null)
-                    activityEntity.setProject(activityModel.getProject().toEntity());
+                    activityEntity.setProject(activityModel.getProject().toEntityWithoutAllFields());
 
                 if(activityModel.getBug() != null)
                     activityEntity.setBug(activityModel.getBug().toEntity());

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.inchl.resourceserver.util.Constants.LOGGER;
+import static com.inchl.resourceserver.util.Constants.*;
 
 @Service
 @Transactional
@@ -44,29 +44,29 @@ public class HomeServiceImpl implements HomeService {
         homeModel.setTotalApps(projectRepository.findAll().toArray().length);
 
         userRepository.findAll().stream().forEach(userModelEntity -> {
-            if(userModelEntity.getUserType().equalsIgnoreCase("DEVELOPER")) {
+            if(userModelEntity.getUserType().equalsIgnoreCase(DEVELOPER)) {
                 LOGGER.info("print developers " + homeModel.getTotalDevelopers());
                 homeModel.setTotalDevelopers(homeModel.getTotalDevelopers() + 1);
-            } else if(userModelEntity.getUserType().equalsIgnoreCase("TESTER")) {
+            } else if(userModelEntity.getUserType().equalsIgnoreCase(TESTER)) {
                 homeModel.setTotalTesters(homeModel.getTotalTesters() + 1);
             }
             LOGGER.info("print get total develoopers: " + homeModel.getTotalDevelopers());
-            LOGGER.info("print user matches dev: " + userModelEntity.getUserType().equalsIgnoreCase("DEVELOPER"));
+            LOGGER.info("print user matches dev: " + userModelEntity.getUserType().equalsIgnoreCase(DEVELOPER));
         });
 
         bugRepository.findAll().stream().forEach(bugModelEntity -> {
             homeModel.setTotalBugs(homeModel.getTotalBugs() + 1);
 
 
-            if(bugModelEntity.getBugStatus().equalsIgnoreCase("ONGOING")) {
+            if(bugModelEntity.getBugStatus().equalsIgnoreCase(ONGOING)) {
                 homeModel.setOpenBugs(homeModel.getOpenBugs() + 1);
-            } else if(bugModelEntity.getBugStatus().equalsIgnoreCase("DONE")) {
+            } else if(bugModelEntity.getBugStatus().equalsIgnoreCase(DONE) || bugModelEntity.getBugStatus().equalsIgnoreCase(CANCEL)) {
                 homeModel.setClosedBugs(homeModel.getClosedBugs() + 1);
             }
 
-            if(bugModelEntity.getBugFlag().equalsIgnoreCase("CRITICAL")) {
+            if(bugModelEntity.getBugFlag().equalsIgnoreCase(CRITICAL)) {
                 homeModel.setCriticalBugs(homeModel.getCriticalBugs() + 1);
-            } else if(bugModelEntity.getBugFlag().equalsIgnoreCase("MAJOR")) {
+            } else if(bugModelEntity.getBugFlag().equalsIgnoreCase(MAJOR)) {
                 homeModel.setMajorBugs(homeModel.getMajorBugs() + 1);
             }
         });

@@ -23,8 +23,8 @@ public class BugServiceImpl implements BugService {
 
     @Override
     public BugModel createBug(BugModel bugModel) {
-        bugRepository.save(bugModel.toEntity());
-        return bugModel;
+        BugModelEntity bugModelEntity = bugRepository.save(bugModel.toEntity());
+        return bugModelEntity.toBugModelWithAllData();
     }
 
     @Override
@@ -63,6 +63,9 @@ public class BugServiceImpl implements BugService {
 
                if(bugModel.getReporter() != null)
                    bugModelEntity.setReporter(bugModel.getReporter().mapModelToEntity());
+
+               if(bugModel.getProject() != null)
+                   bugModelEntity.setProject(bugModel.getProject().toEntityWithoutAllFields());
 
                if(bugModel.getAssignedTo() != null)
                    bugModelEntity.setAssignedTo(bugModel.getAssignedTo().mapModelToEntity());
